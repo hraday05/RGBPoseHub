@@ -1,0 +1,432 @@
+{
+  "total_files": 85,
+  "downloaded": 73,
+  "errors": 12,
+  "files": [
+    {
+      "name": "000_veet.png",
+      "status": "downloaded",
+      "path": "/Users/hradayasthathakran/Desktop/IT303-Project/backend/../dataset/images/000_veet.png"
+    },
+    {
+      "name": "001_color_pencils.png",
+      "status": "downloaded",
+      "path": "/Users/hradayasthathakran/Desktop/IT303-Project/backend/../dataset/images/001_color_pencils.png"
+    },
+    {
+      "name": "002_cupholder.png",
+      "status": "downloaded",
+      "path": "/Users/hradayasthathakran/Desktop/IT303-Project/backend/../dataset/images/002_cupholder.png"
+    },
+    {
+      "name": "003_sports_underwear.png",
+      "status": "downloaded",
+      "path": "/Users/hradayasthathakran/Desktop/IT303-Project/backend/../dataset/images/003_sports_underwear.png"
+    },
+    {
+      "name": "004_axe.png",
+      "status": "downloaded",
+      "path": "/Users/hradayasthathakran/Desktop/IT303-Project/backend/../dataset/images/004_axe.png"
+    },
+    {
+      "name": "005_gleitgel.png",
+      "status": "downloaded",
+      "path": "/Users/hradayasthathakran/Desktop/IT303-Project/backend/../dataset/images/005_gleitgel.png"
+    },
+    {
+      "name": "006_wellness_book.png",
+      "status": "downloaded",
+      "path": "/Users/hradayasthathakran/Desktop/IT303-Project/backend/../dataset/images/006_wellness_book.png"
+    },
+    {
+      "name": "007_smartbox.png",
+      "status": "downloaded",
+      "path": "/Users/hradayasthathakran/Desktop/IT303-Project/backend/../dataset/images/007_smartbox.png"
+    },
+    {
+      "name": "008_denim.png",
+      "status": "downloaded",
+      "path": "/Users/hradayasthathakran/Desktop/IT303-Project/backend/../dataset/images/008_denim.png"
+    },
+    {
+      "name": "009_loreal_gloss.png",
+      "status": "downloaded",
+      "path": "/Users/hradayasthathakran/Desktop/IT303-Project/backend/../dataset/images/009_loreal_gloss.png"
+    },
+    {
+      "name": "010_veet_creme.png",
+      "status": "error",
+      "error": "[Errno 2] No such file or directory: '/Users/hradayasthathakran/Desktop/IT303-Project/backend/../dataset/images/010_veet_creme.png'"
+    },
+    {
+      "name": "011_speedo.png",
+      "status": "error",
+      "error": "[Errno 2] No such file or directory: '/Users/hradayasthathakran/Desktop/IT303-Project/backend/../dataset/images/011_speedo.png'"
+    },
+    {
+      "name": "012_dove_butter.png",
+      "status": "error",
+      "error": "[Errno 2] No such file or directory: '/Users/hradayasthathakran/Desktop/IT303-Project/backend/../dataset/images/012_dove_butter.png'"
+    },
+    {
+      "name": "013_sensodyne.png",
+      "status": "error",
+      "error": "[Errno 2] No such file or directory: '/Users/hradayasthathakran/Desktop/IT303-Project/backend/../dataset/images/013_sensodyne.png'"
+    },
+    {
+      "name": "014_picture.png",
+      "status": "error",
+      "error": "[Errno 2] No such file or directory: '/Users/hradayasthathakran/Desktop/IT303-Project/backend/../dataset/images/014_picture.png'"
+    },
+    {
+      "name": "015_shoebox.png",
+      "status": "error",
+      "error": "[Errno 2] No such file or directory: '/Users/hradayasthathakran/Desktop/IT303-Project/backend/../dataset/images/015_shoebox.png'"
+    },
+    {
+      "name": "016_bibi_bottle.png",
+      "status": "error",
+      "error": "[Errno 2] No such file or directory: '/Users/hradayasthathakran/Desktop/IT303-Project/backend/../dataset/images/016_bibi_bottle.png'"
+    },
+    {
+      "name": "017_box.png",
+      "status": "error",
+      "error": "[Errno 2] No such file or directory: '/Users/hradayasthathakran/Desktop/IT303-Project/backend/../dataset/images/017_box.png'"
+    },
+    {
+      "name": "018_wrapping_tape.png",
+      "status": "error",
+      "error": "[Errno 2] No such file or directory: '/Users/hradayasthathakran/Desktop/IT303-Project/backend/../dataset/images/018_wrapping_tape.png'"
+    },
+    {
+      "name": "019_decoration_tape.png",
+      "status": "error",
+      "error": "[Errno 2] No such file or directory: '/Users/hradayasthathakran/Desktop/IT303-Project/backend/../dataset/images/019_decoration_tape.png'"
+    },
+    {
+      "name": "020_yellow_tape.png",
+      "status": "error",
+      "error": "[Errno 2] No such file or directory: '/Users/hradayasthathakran/Desktop/IT303-Project/backend/../dataset/images/020_yellow_tape.png'"
+    },
+    {
+      "name": "021_envelopes.png",
+      "status": "error",
+      "error": "[Errno 2] No such file or directory: '/Users/hradayasthathakran/Desktop/IT303-Project/backend/../dataset/images/021_envelopes.png'"
+    },
+    {
+      "name": "022_robin_mckelle.png",
+      "status": "downloaded",
+      "path": "/Users/hradayasthathakran/Desktop/IT303-Project/backend/../dataset/images/022_robin_mckelle.png"
+    },
+    {
+      "name": "023_stanley.png",
+      "status": "exists",
+      "path": "/Users/hradayasthathakran/Desktop/IT303-Project/backend/../dataset/images/023_stanley.png"
+    },
+    {
+      "name": "024_blue.png",
+      "status": "exists",
+      "path": "/Users/hradayasthathakran/Desktop/IT303-Project/backend/../dataset/images/024_blue.png"
+    },
+    {
+      "name": "025_best_wishes.png",
+      "status": "exists",
+      "path": "/Users/hradayasthathakran/Desktop/IT303-Project/backend/../dataset/images/025_best_wishes.png"
+    },
+    {
+      "name": "026_sauger.png",
+      "status": "exists",
+      "path": "/Users/hradayasthathakran/Desktop/IT303-Project/backend/../dataset/images/026_sauger.png"
+    },
+    {
+      "name": "027_movie.png",
+      "status": "exists",
+      "path": "/Users/hradayasthathakran/Desktop/IT303-Project/backend/../dataset/images/027_movie.png"
+    },
+    {
+      "name": "028_gillette.png",
+      "status": "exists",
+      "path": "/Users/hradayasthathakran/Desktop/IT303-Project/backend/../dataset/images/028_gillette.png"
+    },
+    {
+      "name": "029_trisa.png",
+      "status": "exists",
+      "path": "/Users/hradayasthathakran/Desktop/IT303-Project/backend/../dataset/images/029_trisa.png"
+    },
+    {
+      "name": "030_toothbrushes.png",
+      "status": "exists",
+      "path": "/Users/hradayasthathakran/Desktop/IT303-Project/backend/../dataset/images/030_toothbrushes.png"
+    },
+    {
+      "name": "031_crazy_lady.png",
+      "status": "exists",
+      "path": "/Users/hradayasthathakran/Desktop/IT303-Project/backend/../dataset/images/031_crazy_lady.png"
+    },
+    {
+      "name": "032_st_tropez.png",
+      "status": "exists",
+      "path": "/Users/hradayasthathakran/Desktop/IT303-Project/backend/../dataset/images/032_st_tropez.png"
+    },
+    {
+      "name": "033_rexona.png",
+      "status": "exists",
+      "path": "/Users/hradayasthathakran/Desktop/IT303-Project/backend/../dataset/images/033_rexona.png"
+    },
+    {
+      "name": "034_guhl.png",
+      "status": "exists",
+      "path": "/Users/hradayasthathakran/Desktop/IT303-Project/backend/../dataset/images/034_guhl.png"
+    },
+    {
+      "name": "035_satin_care_gel.png",
+      "status": "exists",
+      "path": "/Users/hradayasthathakran/Desktop/IT303-Project/backend/../dataset/images/035_satin_care_gel.png"
+    },
+    {
+      "name": "036_rexona_tropical.png",
+      "status": "exists",
+      "path": "/Users/hradayasthathakran/Desktop/IT303-Project/backend/../dataset/images/036_rexona_tropical.png"
+    },
+    {
+      "name": "037_rexona_invisible.png",
+      "status": "exists",
+      "path": "/Users/hradayasthathakran/Desktop/IT303-Project/backend/../dataset/images/037_rexona_invisible.png"
+    },
+    {
+      "name": "038_syoss.png",
+      "status": "exists",
+      "path": "/Users/hradayasthathakran/Desktop/IT303-Project/backend/../dataset/images/038_syoss.png"
+    },
+    {
+      "name": "039_huile.png",
+      "status": "exists",
+      "path": "/Users/hradayasthathakran/Desktop/IT303-Project/backend/../dataset/images/039_huile.png"
+    },
+    {
+      "name": "040_borotalco.png",
+      "status": "exists",
+      "path": "/Users/hradayasthathakran/Desktop/IT303-Project/backend/../dataset/images/040_borotalco.png"
+    },
+    {
+      "name": "041_rexona_diamond.png",
+      "status": "exists",
+      "path": "/Users/hradayasthathakran/Desktop/IT303-Project/backend/../dataset/images/041_rexona_diamond.png"
+    },
+    {
+      "name": "042_borotalco_original.png",
+      "status": "exists",
+      "path": "/Users/hradayasthathakran/Desktop/IT303-Project/backend/../dataset/images/042_borotalco_original.png"
+    },
+    {
+      "name": "043_brylcreem.png",
+      "status": "exists",
+      "path": "/Users/hradayasthathakran/Desktop/IT303-Project/backend/../dataset/images/043_brylcreem.png"
+    },
+    {
+      "name": "044_dove_silky.png",
+      "status": "exists",
+      "path": "/Users/hradayasthathakran/Desktop/IT303-Project/backend/../dataset/images/044_dove_silky.png"
+    },
+    {
+      "name": "045_clear_scalp.png",
+      "status": "exists",
+      "path": "/Users/hradayasthathakran/Desktop/IT303-Project/backend/../dataset/images/045_clear_scalp.png"
+    },
+    {
+      "name": "046_borotalco_invisible.png",
+      "status": "exists",
+      "path": "/Users/hradayasthathakran/Desktop/IT303-Project/backend/../dataset/images/046_borotalco_invisible.png"
+    },
+    {
+      "name": "047_pantene_pro_shampoo.png",
+      "status": "exists",
+      "path": "/Users/hradayasthathakran/Desktop/IT303-Project/backend/../dataset/images/047_pantene_pro_shampoo.png"
+    },
+    {
+      "name": "048_signal.png",
+      "status": "exists",
+      "path": "/Users/hradayasthathakran/Desktop/IT303-Project/backend/../dataset/images/048_signal.png"
+    },
+    {
+      "name": "049_eos_balls.png",
+      "status": "exists",
+      "path": "/Users/hradayasthathakran/Desktop/IT303-Project/backend/../dataset/images/049_eos_balls.png"
+    },
+    {
+      "name": "050_axe_peace.png",
+      "status": "exists",
+      "path": "/Users/hradayasthathakran/Desktop/IT303-Project/backend/../dataset/images/050_axe_peace.png"
+    },
+    {
+      "name": "051_garnier_water.png",
+      "status": "exists",
+      "path": "/Users/hradayasthathakran/Desktop/IT303-Project/backend/../dataset/images/051_garnier_water.png"
+    },
+    {
+      "name": "052_loreal_studio_pro.png",
+      "status": "exists",
+      "path": "/Users/hradayasthathakran/Desktop/IT303-Project/backend/../dataset/images/052_loreal_studio_pro.png"
+    },
+    {
+      "name": "053_dove_lotion.png",
+      "status": "exists",
+      "path": "/Users/hradayasthathakran/Desktop/IT303-Project/backend/../dataset/images/053_dove_lotion.png"
+    },
+    {
+      "name": "054_pantene_pro.png",
+      "status": "exists",
+      "path": "/Users/hradayasthathakran/Desktop/IT303-Project/backend/../dataset/images/054_pantene_pro.png"
+    },
+    {
+      "name": "055_gillette_schaum.png",
+      "status": "exists",
+      "path": "/Users/hradayasthathakran/Desktop/IT303-Project/backend/../dataset/images/055_gillette_schaum.png"
+    },
+    {
+      "name": "056_satin_care.png",
+      "status": "exists",
+      "path": "/Users/hradayasthathakran/Desktop/IT303-Project/backend/../dataset/images/056_satin_care.png"
+    },
+    {
+      "name": "057_loreal_elseve.png",
+      "status": "exists",
+      "path": "/Users/hradayasthathakran/Desktop/IT303-Project/backend/../dataset/images/057_loreal_elseve.png"
+    },
+    {
+      "name": "058_garnier_sensitive.png",
+      "status": "exists",
+      "path": "/Users/hradayasthathakran/Desktop/IT303-Project/backend/../dataset/images/058_garnier_sensitive.png"
+    },
+    {
+      "name": "059_dove_men.png",
+      "status": "exists",
+      "path": "/Users/hradayasthathakran/Desktop/IT303-Project/backend/../dataset/images/059_dove_men.png"
+    },
+    {
+      "name": "060_brylcreem_strong.png",
+      "status": "exists",
+      "path": "/Users/hradayasthathakran/Desktop/IT303-Project/backend/../dataset/images/060_brylcreem_strong.png"
+    },
+    {
+      "name": "061_baby_bottle.png",
+      "status": "exists",
+      "path": "/Users/hradayasthathakran/Desktop/IT303-Project/backend/../dataset/images/061_baby_bottle.png"
+    },
+    {
+      "name": "062_marseiliais_duschgel.png",
+      "status": "exists",
+      "path": "/Users/hradayasthathakran/Desktop/IT303-Project/backend/../dataset/images/062_marseiliais_duschgel.png"
+    },
+    {
+      "name": "063_head_and_shoulders.png",
+      "status": "exists",
+      "path": "/Users/hradayasthathakran/Desktop/IT303-Project/backend/../dataset/images/063_head_and_shoulders.png"
+    },
+    {
+      "name": "064_loreal_elnett.png",
+      "status": "exists",
+      "path": "/Users/hradayasthathakran/Desktop/IT303-Project/backend/../dataset/images/064_loreal_elnett.png"
+    },
+    {
+      "name": "065_duschgel_sport.png",
+      "status": "exists",
+      "path": "/Users/hradayasthathakran/Desktop/IT303-Project/backend/../dataset/images/065_duschgel_sport.png"
+    },
+    {
+      "name": "066_earrings.png",
+      "status": "exists",
+      "path": "/Users/hradayasthathakran/Desktop/IT303-Project/backend/../dataset/images/066_earrings.png"
+    },
+    {
+      "name": "067_looney_toons.png",
+      "status": "exists",
+      "path": "/Users/hradayasthathakran/Desktop/IT303-Project/backend/../dataset/images/067_looney_toons.png"
+    },
+    {
+      "name": "068_kugelschreiber.png",
+      "status": "exists",
+      "path": "/Users/hradayasthathakran/Desktop/IT303-Project/backend/../dataset/images/068_kugelschreiber.png"
+    },
+    {
+      "name": "069_wilkinson_razors.png",
+      "status": "exists",
+      "path": "/Users/hradayasthathakran/Desktop/IT303-Project/backend/../dataset/images/069_wilkinson_razors.png"
+    },
+    {
+      "name": "070_socks.png",
+      "status": "exists",
+      "path": "/Users/hradayasthathakran/Desktop/IT303-Project/backend/../dataset/images/070_socks.png"
+    },
+    {
+      "name": "071_neckerchew.png",
+      "status": "exists",
+      "path": "/Users/hradayasthathakran/Desktop/IT303-Project/backend/../dataset/images/071_neckerchew.png"
+    },
+    {
+      "name": "072_hemd.png",
+      "status": "exists",
+      "path": "/Users/hradayasthathakran/Desktop/IT303-Project/backend/../dataset/images/072_hemd.png"
+    },
+    {
+      "name": "073_case.png",
+      "status": "exists",
+      "path": "/Users/hradayasthathakran/Desktop/IT303-Project/backend/../dataset/images/073_case.png"
+    },
+    {
+      "name": "074_garnier_tucher.png",
+      "status": "exists",
+      "path": "/Users/hradayasthathakran/Desktop/IT303-Project/backend/../dataset/images/074_garnier_tucher.png"
+    },
+    {
+      "name": "075_tshirt.png",
+      "status": "exists",
+      "path": "/Users/hradayasthathakran/Desktop/IT303-Project/backend/../dataset/images/075_tshirt.png"
+    },
+    {
+      "name": "076_case_pink.png",
+      "status": "exists",
+      "path": "/Users/hradayasthathakran/Desktop/IT303-Project/backend/../dataset/images/076_case_pink.png"
+    },
+    {
+      "name": "077_belt.png",
+      "status": "exists",
+      "path": "/Users/hradayasthathakran/Desktop/IT303-Project/backend/../dataset/images/077_belt.png"
+    },
+    {
+      "name": "078_shirt_green.png",
+      "status": "exists",
+      "path": "/Users/hradayasthathakran/Desktop/IT303-Project/backend/../dataset/images/078_shirt_green.png"
+    },
+    {
+      "name": "079_adidas_pants.png",
+      "status": "exists",
+      "path": "/Users/hradayasthathakran/Desktop/IT303-Project/backend/../dataset/images/079_adidas_pants.png"
+    },
+    {
+      "name": "080_sea_squad.png",
+      "status": "exists",
+      "path": "/Users/hradayasthathakran/Desktop/IT303-Project/backend/../dataset/images/080_sea_squad.png"
+    },
+    {
+      "name": "081_jeans.png",
+      "status": "exists",
+      "path": "/Users/hradayasthathakran/Desktop/IT303-Project/backend/../dataset/images/081_jeans.png"
+    },
+    {
+      "name": "082_teddybear.png",
+      "status": "exists",
+      "path": "/Users/hradayasthathakran/Desktop/IT303-Project/backend/../dataset/images/082_teddybear.png"
+    },
+    {
+      "name": "083_shirt.png",
+      "status": "exists",
+      "path": "/Users/hradayasthathakran/Desktop/IT303-Project/backend/../dataset/images/083_shirt.png"
+    },
+    {
+      "name": "084_slippers.png",
+      "status": "exists",
+      "path": "/Users/hradayasthathakran/Desktop/IT303-Project/backend/../dataset/images/084_slippers.png"
+    }
+  ]
+}
