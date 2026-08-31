@@ -4,7 +4,8 @@ Tests model status, training history, and live PyTorch CNN inference.
 """
 import os
 import uuid
-from app import create_app, db
+from app import create_app
+from extensions import db
 from module_auth.models import User
 from module_auth.two_factor import TwoFactorAuth
 

@@ -11,7 +11,7 @@ from flask_jwt_extended import (
     jwt_required, get_jwt_identity, get_jwt
 )
 import bcrypt
-from app import db
+from extensions import db
 from module_auth.models import User, Session, ActivityLog, TwoFactorSecret
 from module_auth.two_factor import TwoFactorAuth
 from module_auth.middleware import log_activity

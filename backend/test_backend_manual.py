@@ -4,7 +4,8 @@ Tests all 3 backend modules without needing a browser frontend.
 Fully idempotent — can be run repeatedly!
 """
 import uuid
-from app import create_app, db
+from app import create_app
+from extensions import db
 from module_auth.models import User, ActivityLog, Session
 from module_auth.two_factor import TwoFactorAuth
 

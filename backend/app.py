@@ -6,10 +6,7 @@ import os
 from flask import Flask
 from flask_cors import CORS
 from flask_jwt_extended import JWTManager
-from flask_sqlalchemy import SQLAlchemy
-
-db = SQLAlchemy()
-jwt = JWTManager()
+from extensions import db, jwt
 
 
 def create_app(config_name=None):
@@ -34,7 +31,7 @@ def create_app(config_name=None):
     # Initialize extensions
     db.init_app(app)
     jwt.init_app(app)
-    CORS(app, supports_credentials=True, origins=["http://localhost:5173", "http://127.0.0.1:5173"])
+    CORS(app, supports_credentials=True, origins=["http://localhost:5173", "http://127.0.0.1:5173", "http://localhost:5001", "http://127.0.0.1:5001", "*"])
 
     # Register blueprints
     from module_auth.routes import auth_bp

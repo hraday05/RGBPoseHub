@@ -7,7 +7,7 @@ from datetime import datetime, timezone
 from functools import wraps
 from flask import request
 from flask_jwt_extended import get_jwt_identity, verify_jwt_in_request
-from app import db
+from extensions import db
 from module_auth.models import User, ActivityLog
 
 

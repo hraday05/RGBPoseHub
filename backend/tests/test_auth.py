@@ -1,6 +1,7 @@
 import unittest
 import json
-from app import create_app, db
+from app import create_app
+from extensions import db
 from module_auth.models import User, ActivityLog, Session
 from module_auth.two_factor import TwoFactorAuth
 
