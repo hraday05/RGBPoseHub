@@ -68,6 +68,14 @@ export const mlAPI = {
   predictFilename: (data) => api.post('/ml/predict', data),
   predictDatasetImage: (filename) => api.post(`/ml/predict-dataset/${filename}`),
   getTrainingHistory: () => api.get('/ml/training-history'),
+  forensicAnalyze: (formData) => api.post('/ml/forensic-analyze', formData, {
+    headers: { 'Content-Type': 'multipart/form-data' },
+  }),
+  forensicAnalyzeJson: (data) => api.post('/ml/forensic-analyze', data),
+  estimatePose: (data) => api.post('/ml/estimate-pose', data),
+  getSampleRGBDImages: () => api.get('/ml/sample-rgbd-images'),
 };
 
 export default api;
+
+

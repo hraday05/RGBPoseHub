@@ -8,9 +8,12 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 from module_ml.model_trainer import ModelTrainer
 from module_ml.inference import InferenceEngine
 from module_ml.visualizer import Visualizer
+from module_ml.forensic_analyzer import ForensicAnalyzer
+from module_ml.pose_estimator import PoseEstimator
 from module_auth.middleware import log_activity
 
 ml_bp = Blueprint('ml', __name__)
+
 
 
 def _get_trainer():
@@ -231,3 +234,155 @@ def training_history():
         'history': history,
         'chart_data': chart_data,
     }), 200
+
+
+@ml_bp.route('/forensic-analyze', methods=['POST'])
+@jwt_required()
+def forensic_analyze():
+    """
+    Stage 1: Run Sherloq-inspired forensic inspection and RGB-D depth verification.
+    """
+    user_id = get_jwt_identity()
+    upload_dir = current_app.config['UPLOAD_FOLDER']
+    os.makedirs(upload_dir, exist_ok=True)
+
+    image_path = None
+    depth_path = None
+    filename = None
+
+    # Handle image upload or filename parameter
+    if 'image' in request.files:
+        file = request.files['image']
+        if file.filename != '':
+            import uuid
+            ext = file.filename.rsplit('.', 1)[-1].lower() if '.' in file.filename else 'png'
+            filename = f'{uuid.uuid4().hex}.{ext}'
+            image_path = os.path.join(upload_dir, filename)
+            file.save(image_path)
+
+    if not image_path and request.is_json:
+        data = request.get_json() or {}
+        filename = data.get('filename')
+        if filename:
+            # Check upload folder or dataset folder
+            upload_candidate = os.path.join(upload_dir, filename)
+            sample_candidate = os.path.join(upload_dir, 'samples', filename)
+            dataset_candidate = os.path.join(current_app.config['DATASET_FOLDER'], 'images', filename)
+            if os.path.exists(upload_candidate):
+                image_path = upload_candidate
+            elif os.path.exists(sample_candidate):
+                image_path = sample_candidate
+            elif os.path.exists(dataset_candidate):
+                image_path = dataset_candidate
+
+
+    if 'depth_image' in request.files:
+        depth_file = request.files['depth_image']
+        if depth_file.filename != '':
+            import uuid
+            ext = depth_file.filename.rsplit('.', 1)[-1].lower() if '.' in depth_file.filename else 'png'
+            depth_filename = f'depth_{uuid.uuid4().hex}.{ext}'
+            depth_path = os.path.join(upload_dir, depth_filename)
+            depth_file.save(depth_path)
+
+    if not image_path or not os.path.exists(image_path):
+        return jsonify({'error': 'Valid image required for forensic analysis'}), 400
+
+    # Run Sherloq Forensic Inspection & RGB-D Verification
+    analyzer = ForensicAnalyzer(upload_folder=upload_dir)
+    forensic_results = analyzer.analyze(image_path, depth_image_path=depth_path)
+
+    # Read original image base64
+    import base64
+    with open(image_path, 'rb') as f:
+        original_b64 = base64.b64encode(f.read()).decode('utf-8')
+
+    log_activity(user_id, 'forensic_analysis', 'ml',
+                 f'Ran Sherloq Forensics & RGB-D Inspection: {filename}',
+                 metadata={
+                     'filename': filename,
+                     'is_rgbd': forensic_results.get('rgbd_gatekeeper', {}).get('is_rgbd'),
+                     'status': forensic_results.get('rgbd_gatekeeper', {}).get('status'),
+                 })
+
+    return jsonify({
+        'forensics': forensic_results,
+        'original_image': original_b64,
+        'filename': filename or os.path.basename(image_path),
+    }), 200
+
+
+@ml_bp.route('/estimate-pose', methods=['POST'])
+@jwt_required()
+def estimate_pose():
+    """
+    Stage 2: Run 6D Object Pose Estimation (unlocked only if RGB-D is verified).
+    """
+    user_id = get_jwt_identity()
+    data = request.get_json() or {}
+    filename = data.get('filename')
+    depth_stats = data.get('depth_stats')
+    prediction_info = data.get('prediction_info')
+
+    if not filename:
+        return jsonify({'error': 'Filename required for 6D pose estimation'}), 400
+
+    upload_dir = current_app.config['UPLOAD_FOLDER']
+    image_path = os.path.join(upload_dir, filename)
+    if not os.path.exists(image_path):
+        image_path = os.path.join(upload_dir, 'samples', filename)
+    if not os.path.exists(image_path):
+        image_path = os.path.join(current_app.config['DATASET_FOLDER'], 'images', filename)
+
+
+    if not os.path.exists(image_path):
+        return jsonify({'error': 'Image file not found'}), 404
+
+    # Run inference to get object class prediction if not provided
+    if not prediction_info:
+        engine = _get_engine()
+        engine.load_model()
+        pred_res = engine.predict(image_path, top_k=1)
+        if pred_res.get('predictions'):
+            prediction_info = pred_res['predictions'][0]
+
+    estimator = PoseEstimator(
+        model_dir=current_app.config['MODEL_FOLDER'],
+        dataset_dir=current_app.config['DATASET_FOLDER'],
+    )
+    pose_result = estimator.estimate_pose(image_path, depth_stats=depth_stats, prediction_info=prediction_info)
+
+    log_activity(user_id, 'pose_estimation', 'ml',
+                 f'Ran 6D Pose Estimation on RGB-D image: {filename}',
+                 metadata=pose_result)
+
+    return jsonify({
+        'pose_result': pose_result,
+        'filename': filename,
+    }), 200
+
+
+@ml_bp.route('/sample-rgbd-images', methods=['GET'])
+@jwt_required()
+def get_sample_rgbd_images():
+    """Returns list of pre-generated sample RGB-D images for testing."""
+    samples_dir = os.path.join(current_app.config['UPLOAD_FOLDER'], 'samples')
+    os.makedirs(samples_dir, exist_ok=True)
+
+    # Ensure samples exist
+    if not os.path.exists(os.path.join(samples_dir, 'sample_rgbd_box.png')):
+        from create_sample_rgbd_images import create_sample_rgbd_images
+        create_sample_rgbd_images(samples_dir)
+
+    samples = []
+    for fname in sorted(os.listdir(samples_dir)):
+        if fname.endswith('.png') and not fname.endswith('_depth.png'):
+            samples.append({
+                'filename': fname,
+                'name': fname.replace('sample_rgbd_', '').replace('.png', '').replace('_', ' ').title(),
+                'type': '4-Channel RGB-D',
+            })
+
+    return jsonify({'samples': samples}), 200
+
+
