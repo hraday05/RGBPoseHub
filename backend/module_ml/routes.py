@@ -316,13 +316,16 @@ def forensic_analyze():
 @jwt_required()
 def estimate_pose():
     """
-    Stage 2: Run 6D Object Pose Estimation (unlocked only if RGB-D is verified).
+    Stage 2: Run 6D Object Pose Estimation (Track A EfficientPose, Track B PnP, or both).
     """
     user_id = get_jwt_identity()
     data = request.get_json() or {}
     filename = data.get('filename')
+    depth_filename = data.get('depth_filename')
     depth_stats = data.get('depth_stats')
     prediction_info = data.get('prediction_info')
+    track = data.get('track', 'both')  # 'track_a', 'track_b', or 'both'
+    camera_params = data.get('camera_params')
 
     if not filename:
         return jsonify({'error': 'Filename required for 6D pose estimation'}), 400
@@ -334,9 +337,18 @@ def estimate_pose():
     if not os.path.exists(image_path):
         image_path = os.path.join(current_app.config['DATASET_FOLDER'], 'images', filename)
 
-
     if not os.path.exists(image_path):
         return jsonify({'error': 'Image file not found'}), 404
+
+    # Resolve separate depth file if provided
+    depth_path = None
+    if depth_filename:
+        cand1 = os.path.join(upload_dir, depth_filename)
+        cand2 = os.path.join(upload_dir, 'samples', depth_filename)
+        if os.path.exists(cand1):
+            depth_path = cand1
+        elif os.path.exists(cand2):
+            depth_path = cand2
 
     # Run inference to get object class prediction if not provided
     if not prediction_info:
@@ -350,14 +362,77 @@ def estimate_pose():
         model_dir=current_app.config['MODEL_FOLDER'],
         dataset_dir=current_app.config['DATASET_FOLDER'],
     )
-    pose_result = estimator.estimate_pose(image_path, depth_stats=depth_stats, prediction_info=prediction_info)
+    pose_result = estimator.estimate_pose(
+        image_path,
+        depth_path=depth_path,
+        depth_stats=depth_stats,
+        prediction_info=prediction_info,
+        track=track,
+        camera_params=camera_params
+    )
 
     log_activity(user_id, 'pose_estimation', 'ml',
-                 f'Ran 6D Pose Estimation on RGB-D image: {filename}',
-                 metadata=pose_result)
+                 f'Ran 6D Pose Estimation ({track}) on RGB-D image: {filename}',
+                 metadata={
+                     'filename': filename,
+                     'track': track,
+                     'object_name': pose_result.get('object_name'),
+                     'confidence': pose_result.get('confidence_pct'),
+                 })
 
     return jsonify({
         'pose_result': pose_result,
+        'filename': filename,
+    }), 200
+
+
+@ml_bp.route('/point-cloud-3d', methods=['POST'])
+@jwt_required()
+def get_point_cloud_3d():
+    """
+    Generates interactive 3D point cloud coordinates (XYZ + RGB) for WebGL rendering.
+    """
+    data = request.get_json() or {}
+    filename = data.get('filename')
+    depth_filename = data.get('depth_filename')
+    max_points = data.get('max_points', 30000)
+    camera_params = data.get('camera_params')
+
+    if not filename:
+        return jsonify({'error': 'Filename required for 3D point cloud generation'}), 400
+
+    upload_dir = current_app.config['UPLOAD_FOLDER']
+    image_path = os.path.join(upload_dir, filename)
+    if not os.path.exists(image_path):
+        image_path = os.path.join(upload_dir, 'samples', filename)
+    if not os.path.exists(image_path):
+        image_path = os.path.join(current_app.config['DATASET_FOLDER'], 'images', filename)
+
+    if not os.path.exists(image_path):
+        return jsonify({'error': 'Image file not found'}), 404
+
+    depth_path = None
+    if depth_filename:
+        cand1 = os.path.join(upload_dir, depth_filename)
+        cand2 = os.path.join(upload_dir, 'samples', depth_filename)
+        if os.path.exists(cand1):
+            depth_path = cand1
+        elif os.path.exists(cand2):
+            depth_path = cand2
+
+    estimator = PoseEstimator(
+        model_dir=current_app.config['MODEL_FOLDER'],
+        dataset_dir=current_app.config['DATASET_FOLDER'],
+    )
+    cloud_payload = estimator.generate_point_cloud(
+        image_path,
+        depth_path=depth_path,
+        max_points=max_points,
+        camera_params=camera_params
+    )
+
+    return jsonify({
+        'point_cloud': cloud_payload,
         'filename': filename,
     }), 200
 

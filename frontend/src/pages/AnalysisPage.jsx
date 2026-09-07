@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { dataAPI, mlAPI } from '../services/api';
+import PointCloudViewer3D from '../components/PointCloudViewer3D';
 
 export default function AnalysisPage() {
   const [tab, setTab] = useState('upload'); // upload | catalog
@@ -18,6 +19,7 @@ export default function AnalysisPage() {
   const [loading, setLoading] = useState(false);
   const [poseLoading, setPoseLoading] = useState(false);
   const [error, setError] = useState('');
+  const [poseTrackTab, setPoseTrackTab] = useState('dual'); // dual | track_a | track_b
 
   // Sample RGB-D State
   const [samples, setSamples] = useState([]);
@@ -123,8 +125,10 @@ export default function AnalysisPage() {
       const res = await mlAPI.estimatePose({
         filename: currentFilename,
         depth_stats: forensics.rgbd_gatekeeper.depth_stats,
+        track: 'both',
       });
       setPoseResults(res.data.pose_result);
+      setPoseTrackTab('dual');
     } catch (err) {
       setError(err.response?.data?.error || 'Pose estimation failed');
     } finally {
@@ -605,42 +609,349 @@ export default function AnalysisPage() {
 
                 {/* Part 2: 6D Pose Estimation Results */}
                 {poseResults && (
-                  <div style={{ marginTop: '2rem', borderTop: '2px dashed #10b981', paddingTop: '1.5rem' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem' }}>
-                      <span style={{ fontSize: '1.5rem' }}>🎯</span>
-                      <h3>Part 2: 6D Pose Detection & Object Estimation Results</h3>
-                    </div>
-
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '1.25rem' }}>
-                      <div className="card">
-                        <h4>3D Pose Visualization Overlay</h4>
-                        <img src={`data:image/png;base64,${poseResults.pose_visualization}`} alt="3D Pose Overlay" style={{ width: '100%', borderRadius: '8px' }} />
+                  <div style={{ marginTop: '2.5rem', borderTop: '2px solid rgba(16, 185, 129, 0.3)', paddingTop: '2rem' }}>
+                    {/* Startup Header Banner */}
+                    <div style={{
+                      display: 'flex',
+                      flexWrap: 'wrap',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      marginBottom: '1.5rem',
+                      gap: '1rem',
+                    }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem' }}>
+                        <div style={{
+                          width: '42px',
+                          height: '42px',
+                          borderRadius: '12px',
+                          background: 'linear-gradient(135deg, #10b981, #06b6d4)',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          boxShadow: '0 0 20px rgba(16, 185, 129, 0.4)',
+                          fontSize: '1.35rem',
+                        }}>
+                          🎯
+                        </div>
+                        <div>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                            <h3 style={{ margin: 0, fontSize: '1.35rem', fontWeight: 700, color: '#f8fafc', letterSpacing: '-0.02em' }}>
+                              6D Spatial Pose & Geometry Workbench
+                            </h3>
+                            <span style={{
+                              background: 'rgba(16, 185, 129, 0.15)',
+                              color: '#34d399',
+                              border: '1px solid rgba(16, 185, 129, 0.3)',
+                              padding: '0.2rem 0.6rem',
+                              borderRadius: '999px',
+                              fontSize: '0.72rem',
+                              fontWeight: 600,
+                              textTransform: 'uppercase',
+                              letterSpacing: '0.05em',
+                            }}>
+                              Dual-Track Verified
+                            </span>
+                          </div>
+                          <p style={{ margin: '0.2rem 0 0', fontSize: '0.85rem', color: '#94a3b8' }}>
+                            Simultaneous Deep Learning Regression (Track A) & Geometric PnP Correspondence (Track B)
+                          </p>
+                        </div>
                       </div>
 
-                      <div className="card">
-                        <h4>6D Pose Parameters & Spatial Metrics</h4>
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginTop: '0.5rem' }}>
-                          <div style={{ background: 'var(--code-bg)', padding: '0.75rem', borderRadius: '8px' }}>
-                            <h5 style={{ margin: '0 0 0.25rem', color: '#3b82f6' }}>Target Object & Confidence</h5>
-                            <div style={{ fontSize: '1.1rem', fontWeight: 'bold' }}>{poseResults.object_name}</div>
-                            <div style={{ fontSize: '0.85rem', color: '#10b981' }}>Confidence: {poseResults.confidence_pct}%</div>
+                      {/* Track Selector Segmented Tabs */}
+                      <div style={{
+                        display: 'flex',
+                        background: 'rgba(15, 23, 42, 0.75)',
+                        padding: '0.3rem',
+                        borderRadius: '12px',
+                        border: '1px solid rgba(255, 255, 255, 0.1)',
+                        gap: '0.3rem',
+                      }}>
+                        <button
+                          onClick={() => setPoseTrackTab('dual')}
+                          style={{
+                            background: poseTrackTab === 'dual' ? 'linear-gradient(135deg, #3b82f6, #06b6d4)' : 'transparent',
+                            color: poseTrackTab === 'dual' ? '#ffffff' : '#94a3b8',
+                            border: 'none',
+                            padding: '0.5rem 1rem',
+                            borderRadius: '8px',
+                            fontSize: '0.82rem',
+                            fontWeight: 600,
+                            cursor: 'pointer',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '0.4rem',
+                            transition: 'all 0.2s',
+                          }}
+                        >
+                          ⚡ Dual-Track Comparison
+                        </button>
+
+                        <button
+                          onClick={() => setPoseTrackTab('track_a')}
+                          style={{
+                            background: poseTrackTab === 'track_a' ? 'linear-gradient(135deg, #10b981, #059669)' : 'transparent',
+                            color: poseTrackTab === 'track_a' ? '#ffffff' : '#94a3b8',
+                            border: 'none',
+                            padding: '0.5rem 1rem',
+                            borderRadius: '8px',
+                            fontSize: '0.82rem',
+                            fontWeight: 600,
+                            cursor: 'pointer',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '0.4rem',
+                            transition: 'all 0.2s',
+                          }}
+                        >
+                          🧠 Track A: EfficientPose
+                        </button>
+
+                        <button
+                          onClick={() => setPoseTrackTab('track_b')}
+                          style={{
+                            background: poseTrackTab === 'track_b' ? 'linear-gradient(135deg, #d946ef, #8b5cf6)' : 'transparent',
+                            color: poseTrackTab === 'track_b' ? '#ffffff' : '#94a3b8',
+                            border: 'none',
+                            padding: '0.5rem 1rem',
+                            borderRadius: '8px',
+                            fontSize: '0.82rem',
+                            fontWeight: 600,
+                            cursor: 'pointer',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '0.4rem',
+                            transition: 'all 0.2s',
+                          }}
+                        >
+                          📐 Track B: Geometric PnP
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* Dual-Track Comparison Card */}
+                    {poseTrackTab === 'dual' && poseResults.comparison && (
+                      <div style={{
+                        background: 'linear-gradient(135deg, rgba(6, 182, 212, 0.08), rgba(59, 130, 246, 0.04))',
+                        border: '1px solid rgba(6, 182, 212, 0.3)',
+                        borderRadius: '14px',
+                        padding: '1.25rem 1.5rem',
+                        marginBottom: '1.5rem',
+                        display: 'flex',
+                        flexWrap: 'wrap',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        gap: '1rem',
+                      }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                          <div style={{
+                            padding: '0.5rem 0.8rem',
+                            borderRadius: '10px',
+                            background: poseResults.comparison.agreement_status === 'High Alignment' ? 'rgba(16, 185, 129, 0.2)' : 'rgba(245, 158, 11, 0.2)',
+                            color: poseResults.comparison.agreement_status === 'High Alignment' ? '#34d399' : '#fbbf24',
+                            fontWeight: 700,
+                            fontSize: '0.85rem',
+                            border: `1px solid ${poseResults.comparison.agreement_status === 'High Alignment' ? 'rgba(16, 185, 129, 0.4)' : 'rgba(245, 158, 11, 0.4)'}`,
+                          }}>
+                            {poseResults.comparison.agreement_status}
+                          </div>
+                          <div>
+                            <div style={{ fontSize: '0.95rem', fontWeight: 600, color: '#f1f5f9' }}>
+                              Cross-Track Geometric Consistency
+                            </div>
+                            <div style={{ fontSize: '0.82rem', color: '#94a3b8' }}>
+                              {poseResults.comparison.summary}
+                            </div>
+                          </div>
+                        </div>
+
+                        <div style={{ display: 'flex', gap: '1.5rem', fontFamily: 'var(--mono)', fontSize: '0.85rem' }}>
+                          <div>
+                            <span style={{ color: '#94a3b8' }}>Translation Delta (ΔT): </span>
+                            <strong style={{ color: '#38bdf8' }}>{(poseResults.comparison.translation_delta_m * 100).toFixed(1)} cm</strong>
+                          </div>
+                          <div>
+                            <span style={{ color: '#94a3b8' }}>Angular Delta (Δθ): </span>
+                            <strong style={{ color: '#a78bfa' }}>{poseResults.comparison.rotation_delta_deg}°</strong>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Content View: Dual Side-by-Side */}
+                    {poseTrackTab === 'dual' && (
+                      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(420px, 1fr))', gap: '1.5rem' }}>
+                        {/* Track A Card */}
+                        <div className="card" style={{ border: '1px solid rgba(16, 185, 129, 0.3)' }}>
+                          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.75rem' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                              <span style={{ fontSize: '1.1rem' }}>🧠</span>
+                              <h4 style={{ margin: 0, color: '#34d399' }}>Track A: EfficientPose (Deep Neural)</h4>
+                            </div>
+                            <span style={{ fontSize: '0.75rem', background: 'rgba(16, 185, 129, 0.15)', color: '#34d399', padding: '0.2rem 0.5rem', borderRadius: '6px' }}>
+                              Direct Regression
+                            </span>
                           </div>
 
-                          <div style={{ background: 'var(--code-bg)', padding: '0.75rem', borderRadius: '8px' }}>
-                            <h5 style={{ margin: '0 0 0.25rem', color: '#f59e0b' }}>3D Translation Vector (Tx, Ty, Tz)</h5>
-                            <div style={{ fontFamily: 'var(--mono)', fontSize: '0.95rem' }}>{poseResults.translation_3d.vector_formatted}</div>
+                          {poseResults.track_a && (
+                            <>
+                              <img
+                                src={`data:image/png;base64,${poseResults.track_a.pose_visualization}`}
+                                alt="Track A Overlay"
+                                style={{ width: '100%', borderRadius: '8px', marginBottom: '1rem', border: '1px solid rgba(255,255,255,0.08)' }}
+                              />
+                              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem', fontSize: '0.85rem' }}>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.4rem 0.6rem', background: 'var(--code-bg)', borderRadius: '6px' }}>
+                                  <span style={{ color: '#94a3b8' }}>Target Class:</span>
+                                  <strong>{poseResults.track_a.object_name} ({poseResults.track_a.confidence_pct.toFixed(1)}%)</strong>
+                                </div>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.4rem 0.6rem', background: 'var(--code-bg)', borderRadius: '6px', fontFamily: 'var(--mono)' }}>
+                                  <span style={{ color: '#94a3b8' }}>Translation [Tx, Ty, Tz]:</span>
+                                  <strong style={{ color: '#38bdf8' }}>{poseResults.track_a.translation_vector_m.formatted}</strong>
+                                </div>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.4rem 0.6rem', background: 'var(--code-bg)', borderRadius: '6px', fontFamily: 'var(--mono)' }}>
+                                  <span style={{ color: '#94a3b8' }}>Quaternion:</span>
+                                  <strong style={{ color: '#a78bfa' }}>{poseResults.track_a.rotation_quaternion.formatted}</strong>
+                                </div>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.4rem 0.6rem', background: 'var(--code-bg)', borderRadius: '6px' }}>
+                                  <span style={{ color: '#94a3b8' }}>3D Box Dimensions:</span>
+                                  <span>{poseResults.track_a.bounding_box_3d.length_m}m × {poseResults.track_a.bounding_box_3d.width_m}m × {poseResults.track_a.bounding_box_3d.height_m}m</span>
+                                </div>
+                              </div>
+                            </>
+                          )}
+                        </div>
+
+                        {/* Track B Card */}
+                        <div className="card" style={{ border: '1px solid rgba(217, 70, 239, 0.3)' }}>
+                          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.75rem' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                              <span style={{ fontSize: '1.1rem' }}>📐</span>
+                              <h4 style={{ margin: 0, color: '#f472b6' }}>Track B: Proper PnP + RANSAC</h4>
+                            </div>
+                            <span style={{ fontSize: '0.75rem', background: 'rgba(217, 70, 239, 0.15)', color: '#f472b6', padding: '0.2rem 0.5rem', borderRadius: '6px' }}>
+                              Geometric Vision
+                            </span>
                           </div>
 
-                          <div style={{ background: 'var(--code-bg)', padding: '0.75rem', borderRadius: '8px' }}>
-                            <h5 style={{ margin: '0 0 0.25rem', color: '#8b5cf6' }}>3D Rotation & Quaternion</h5>
-                            <div style={{ fontSize: '0.85rem' }}><strong>Euler:</strong> {poseResults.rotation_euler_deg.formatted}</div>
-                            <div style={{ fontSize: '0.85rem', fontFamily: 'var(--mono)', marginTop: '0.2rem' }}>
-                              <strong>Quaternion:</strong> {poseResults.rotation_quaternion.formatted}
+                          {poseResults.track_b && (
+                            <>
+                              <img
+                                src={`data:image/png;base64,${poseResults.track_b.pose_visualization}`}
+                                alt="Track B Overlay"
+                                style={{ width: '100%', borderRadius: '8px', marginBottom: '1rem', border: '1px solid rgba(255,255,255,0.08)' }}
+                              />
+                              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem', fontSize: '0.85rem' }}>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.4rem 0.6rem', background: 'var(--code-bg)', borderRadius: '6px' }}>
+                                  <span style={{ color: '#94a3b8' }}>Solver Engine:</span>
+                                  <strong>{poseResults.track_b.solver}</strong>
+                                </div>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.4rem 0.6rem', background: 'var(--code-bg)', borderRadius: '6px' }}>
+                                  <span style={{ color: '#94a3b8' }}>PnP Inlier Ratio:</span>
+                                  <strong style={{ color: '#34d399' }}>{poseResults.track_b.pnp_metrics.inlier_count}/{poseResults.track_b.pnp_metrics.total_correspondences} ({poseResults.track_b.pnp_metrics.inlier_ratio_pct}%)</strong>
+                                </div>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.4rem 0.6rem', background: 'var(--code-bg)', borderRadius: '6px' }}>
+                                  <span style={{ color: '#94a3b8' }}>Reprojection Error:</span>
+                                  <strong style={{ color: '#fbbf24' }}>{poseResults.track_b.pnp_metrics.mean_reprojection_error_px} px ({poseResults.track_b.pnp_metrics.convergence})</strong>
+                                </div>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.4rem 0.6rem', background: 'var(--code-bg)', borderRadius: '6px', fontFamily: 'var(--mono)' }}>
+                                  <span style={{ color: '#94a3b8' }}>Translation [Tx, Ty, Tz]:</span>
+                                  <strong style={{ color: '#38bdf8' }}>{poseResults.track_b.translation_vector_m.formatted}</strong>
+                                </div>
+                              </div>
+                            </>
+                          )}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Content View: Track A Solo */}
+                    {poseTrackTab === 'track_a' && poseResults.track_a && (
+                      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))', gap: '1.5rem' }}>
+                        <div className="card">
+                          <h4>EfficientPose 3D Bounding Box Overlay</h4>
+                          <img src={`data:image/png;base64,${poseResults.track_a.pose_visualization}`} alt="Track A 3D Overlay" style={{ width: '100%', borderRadius: '8px' }} />
+                        </div>
+                        <div className="card">
+                          <h4>Track A Deep Regression Metrics</h4>
+                          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginTop: '0.5rem' }}>
+                            <div style={{ background: 'var(--code-bg)', padding: '0.75rem', borderRadius: '8px' }}>
+                              <h5 style={{ margin: '0 0 0.25rem', color: '#10b981' }}>Object Detection & Confidence</h5>
+                              <div style={{ fontSize: '1.1rem', fontWeight: 'bold' }}>{poseResults.track_a.object_name}</div>
+                              <div style={{ fontSize: '0.85rem', color: '#34d399' }}>Confidence: {poseResults.track_a.confidence_pct}%</div>
+                            </div>
+                            <div style={{ background: 'var(--code-bg)', padding: '0.75rem', borderRadius: '8px' }}>
+                              <h5 style={{ margin: '0 0 0.25rem', color: '#38bdf8' }}>Translation Vector (Camera Frame)</h5>
+                              <div style={{ fontFamily: 'var(--mono)', fontSize: '0.95rem' }}>{poseResults.track_a.translation_vector_m.formatted}</div>
+                            </div>
+                            <div style={{ background: 'var(--code-bg)', padding: '0.75rem', borderRadius: '8px' }}>
+                              <h5 style={{ margin: '0 0 0.25rem', color: '#a78bfa' }}>Continuous 6D Rotation & Quaternion</h5>
+                              <div style={{ fontSize: '0.85rem' }}>{poseResults.track_a.rotation_euler_deg.formatted}</div>
+                              <div style={{ fontSize: '0.85rem', fontFamily: 'var(--mono)', marginTop: '0.2rem' }}>
+                                Quaternion: {poseResults.track_a.rotation_quaternion.formatted}
+                              </div>
+                            </div>
+                            <div style={{ background: 'var(--code-bg)', padding: '0.75rem', borderRadius: '8px' }}>
+                              <h5 style={{ margin: '0 0 0.25rem', color: '#f59e0b' }}>3D Metric Bounding Box</h5>
+                              <div style={{ fontSize: '0.85rem' }}>
+                                {poseResults.track_a.bounding_box_3d.length_m}m (L) × {poseResults.track_a.bounding_box_3d.width_m}m (W) × {poseResults.track_a.bounding_box_3d.height_m}m (H)
+                              </div>
+                              <div style={{ fontSize: '0.85rem', color: '#94a3b8', marginTop: '0.2rem' }}>
+                                Volume: {poseResults.track_a.bounding_box_3d.volume_cm3} cm³
+                              </div>
                             </div>
                           </div>
                         </div>
                       </div>
-                    </div>
+                    )}
+
+                    {/* Content View: Track B Solo */}
+                    {poseTrackTab === 'track_b' && poseResults.track_b && (
+                      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))', gap: '1.5rem' }}>
+                        <div className="card">
+                          <h4>PnP 2D-3D Keypoint Correspondences</h4>
+                          <img src={`data:image/png;base64,${poseResults.track_b.pose_visualization}`} alt="Track B PnP Overlay" style={{ width: '100%', borderRadius: '8px' }} />
+                        </div>
+                        <div className="card">
+                          <h4>Proper PnP Geometric Metrics</h4>
+                          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginTop: '0.5rem' }}>
+                            <div style={{ background: 'var(--code-bg)', padding: '0.75rem', borderRadius: '8px' }}>
+                              <h5 style={{ margin: '0 0 0.25rem', color: '#d946ef' }}>PnP Solver & Optimizations</h5>
+                              <div style={{ fontSize: '0.95rem', fontWeight: 'bold' }}>{poseResults.track_b.solver}</div>
+                            </div>
+                            <div style={{ background: 'var(--code-bg)', padding: '0.75rem', borderRadius: '8px' }}>
+                              <h5 style={{ margin: '0 0 0.25rem', color: '#34d399' }}>Correspondences & Inlier Rate</h5>
+                              <div style={{ fontSize: '0.95rem', fontWeight: 'bold' }}>
+                                {poseResults.track_b.pnp_metrics.inlier_count} of {poseResults.track_b.pnp_metrics.total_correspondences} Inliers ({poseResults.track_b.pnp_metrics.inlier_ratio_pct}%)
+                              </div>
+                              <div style={{ fontSize: '0.85rem', color: '#fbbf24', marginTop: '0.2rem' }}>
+                                Mean Reprojection Error: {poseResults.track_b.pnp_metrics.mean_reprojection_error_px} px ({poseResults.track_b.pnp_metrics.convergence})
+                              </div>
+                            </div>
+                            <div style={{ background: 'var(--code-bg)', padding: '0.75rem', borderRadius: '8px' }}>
+                              <h5 style={{ margin: '0 0 0.25rem', color: '#38bdf8' }}>PnP + Depth Translation</h5>
+                              <div style={{ fontFamily: 'var(--mono)', fontSize: '0.95rem' }}>{poseResults.track_b.translation_vector_m.formatted}</div>
+                            </div>
+                            <div style={{ background: 'var(--code-bg)', padding: '0.75rem', borderRadius: '8px' }}>
+                              <h5 style={{ margin: '0 0 0.25rem', color: '#a78bfa' }}>Rodrigues Rotation Angles</h5>
+                              <div style={{ fontSize: '0.85rem' }}>{poseResults.track_b.rotation_euler_deg.formatted}</div>
+                              <div style={{ fontSize: '0.85rem', fontFamily: 'var(--mono)', marginTop: '0.2rem' }}>
+                                Quaternion: {poseResults.track_b.rotation_quaternion.formatted}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Part 3: Interactive 3D Point Cloud WebGL Canvas */}
+                    {poseResults.point_cloud_3d && (
+                      <PointCloudViewer3D
+                        pointCloudData={poseResults.point_cloud_3d}
+                        boundingBox3D={poseResults.bounding_box_3d}
+                        objectName={poseResults.object_name}
+                      />
+                    )}
                   </div>
                 )}
               </div>
